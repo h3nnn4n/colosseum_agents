@@ -1,2 +1,8 @@
 __pycache__
 *.logs
+
+*.zip
+
+*.tar
+*.bz2
+*.gz
