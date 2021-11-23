@@ -74,26 +74,34 @@ class Exterminator(Agent):
 
 def main():
     exterminator = Exterminator()
+    logging.info("main")
 
     while exterminator.run:
+        logging.info("loop")
         exterminator.read_state()
 
         state = exterminator.state
+        logging.info(f"{len(state.actors)} {len(state.actors.mine)} {exterminator.gatherers} {exterminator.killers}")
         for actor in state.actors.mine.id_in(exterminator.gatherers):
             food = exterminator.get_food_target_for(actor)
 
             if actor.distance_to(food) < 0.1:
+                logging.info("take food")
                 actor.take(food)
             elif actor.food > 100:
                 base = state.bases.mine.closest_to(actor)
                 if actor.distance_to(base) >= 0.1:
+                    logging.info("move to base")
                     actor.move(base)
                 else:
+                    logging.info("deposit_food")
                     actor.deposit_food(base)
             else:
+                logging.info("move to food")
                 actor.move(food)
 
         if len(exterminator.killers) >= 1:
+            logging.info("kill mode")
             base = state.bases.mine.first
             enemy = state.actors.enemy.closest_to(base) or state.bases.enemy.closest_to(
                 base
