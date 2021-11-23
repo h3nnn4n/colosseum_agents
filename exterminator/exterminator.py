@@ -26,6 +26,9 @@ class Exterminator(Agent):
             return "killer"
 
     def post_state_update(self):
+        actors_alive = set(self.state.actors.mine.ids)
+        self.gatherers = self.gatherers & actors_alive
+        self.killers = self.killers & actors_alive
         assigned_actors = self.gatherers | self.killers
         idle_actors = self.state.actors.mine.id_not_in(assigned_actors)
 
