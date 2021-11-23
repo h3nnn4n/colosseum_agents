@@ -14,6 +14,7 @@ class Exterminator(Agent):
 
         self.gatherers = set()
         self.killers = set()
+        self.targets = {}
 
     def what_to_spawn_next(self):
         target_gather_kill_ratio = 2
@@ -45,6 +46,28 @@ class Exterminator(Agent):
             self.gatherers.update(self.killers)
             self.killers.clear()
 
+    def _valid_food(self, food):
+        food_id = food.id
+        for f in self.state.foods:
+            if food_id == f.id:
+                return True
+        return False
+
+    def _get_free_food_for(self, actor):
+        used_ids = [f.id for f in self.targets.values()]
+        return self.state.foods.id_not_in(used_ids).closest_to(actor)
+
+    def get_food_target_for(self, actor):
+        if actor.id not in self.targets.keys():
+            self.targets[actor.id] = self._get_free_food_for(actor)
+        elif not self._valid_food(self.targets[actor.id]):
+            self.targets[actor.id] = self._get_free_food_for(actor)
+
+        if not self.targets[actor.id]:
+            self.targets[actor.id] = self.state.foods.random
+
+        return self.targets[actor.id]
+
 
 def main():
     exterminator = Exterminator()
@@ -54,7 +77,7 @@ def main():
 
         state = exterminator.state
         for actor in state.actors.mine.id_in(exterminator.gatherers):
-            food = state.foods.closest_to(actor)
+            food = exterminator.get_food_target_for(actor)
 
             if actor.distance_to(food) < 0.1:
                 actor.take(food)
@@ -84,7 +107,9 @@ def main():
 
         for base in state.bases.mine:
             if base.food > 100 and state.actors.mine.count < 6:
-                base.spawn()
+                closest_actor = state.actors.mine.closest_to(base)
+                if base.distance_to(closest_actor) > 3:
+                    base.spawn()
 
         exterminator.send_commands()
 
