@@ -287,8 +287,9 @@ class BaseCollection:
         self._records.extend(records)
         return self
 
-    def _update(self, new_state, agent_id):
-        self._agent_id = agent_id
+    def _update(self, new_state, agent_id=None):
+        if agent_id:
+            self._agent_id = agent_id
 
         logging.debug(f"{new_state=}")
         new_state_ids = set(x["id"] for x in new_state)
@@ -653,8 +654,8 @@ class State:
     Encapsulates the world state. Can be used to issue commands to controlable
     entities, filter entities, etc. The state is writable, but only actions set
     by calling the action methods have an efect in the simulation. The
-    :class:`State` should be considered ephemeral, as it is destroyed and
-    reconstructed at every simulation epoch.
+    :class:`State` and its children entities (food, actors and bases) are
+    persisted across epochs and can have custom data set on them.
     """
 
     def __init__(self, state, owner_id):
@@ -739,7 +740,7 @@ class State:
         """
         return self._state.get("actors") is None
 
-    def _update(self, new_state, agent_id):
+    def _update(self, new_state, agent_id=None):
         """
         Apply changes from a new state on top of the existing entity
         collections. Existing instances are kept, dead ones are removed and new
