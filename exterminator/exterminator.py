@@ -59,7 +59,7 @@ def main():
             if actor.distance_to(food) < 0.1:
                 actor.take(food)
             elif actor.food > 100:
-                base = state.bases.closest_to(actor)
+                base = state.bases.mine.closest_to(actor)
                 if actor.distance_to(base) >= 0.1:
                     actor.move(base)
                 else:
@@ -68,7 +68,7 @@ def main():
                 actor.move(food)
 
         if len(exterminator.killers) >= 2:
-            base = state.bases.first
+            base = state.bases.mine.first
             enemy = state.actors.enemy.closest_to(base) or state.bases.enemy.closest_to(
                 base
             )
