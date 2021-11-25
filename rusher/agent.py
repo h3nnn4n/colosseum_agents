@@ -2,7 +2,7 @@
 
 import logging
 
-from colosseum_sdk.colosseum_sdk import Agent
+from colosseum_sdk import Agent
 
 
 AGENT_NAME = "rusher"
