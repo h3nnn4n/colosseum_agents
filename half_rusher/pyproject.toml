@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "exterminator"
+name = "agent"
 version = "0.1.0"
-description = "The Exterminator"
+description = "agent"
 authors = ["h3nnn4n <colosseum@h3nnn4n.me>"]
 license = "MIT"
 
