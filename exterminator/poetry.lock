@@ -1,4 +1,15 @@
 [[package]]
+name = "colosseum-sdk"
+version = "0.1.2"
+description = "Colosseum's SDK for developing agents"
+category = "main"
+optional = false
+python-versions = ">=3.10,<3.11"
+
+[package.dependencies]
+numpy = ">=1.21.4,<2.0.0"
+
+[[package]]
 name = "numpy"
 version = "1.21.4"
 description = "NumPy is the fundamental package for array computing with Python."
@@ -9,9 +20,13 @@ python-versions = ">=3.7,<3.11"
 [metadata]
 lock-version = "1.1"
 python-versions = "3.10"
-content-hash = "6328fa2a3ae2b870d3205effe63dd7ab8abe75acaac45a89d1efe4bdec9998ae"
+content-hash = "195c63486b577e7f754512edb2667e1466c346187805c88ab610fe3b312c1a5b"
 
 [metadata.files]
+colosseum-sdk = [
+    {file = "colosseum_sdk-0.1.2-py3-none-any.whl", hash = "sha256:d0a70de12e1bfe04a6d89e48da60f26df756ee855f63de9d9bbdcf5ff6ca23b4"},
+    {file = "colosseum_sdk-0.1.2.tar.gz", hash = "sha256:d4c838654760b9a2d23386c04734991aa019a1521b440ddc3ef8e10406da698d"},
+]
 numpy = [
     {file = "numpy-1.21.4-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:8890b3360f345e8360133bc078d2dacc2843b6ee6059b568781b15b97acbe39f"},
     {file = "numpy-1.21.4-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:69077388c5a4b997442b843dbdc3a85b420fb693ec8e33020bb24d647c164fa5"},

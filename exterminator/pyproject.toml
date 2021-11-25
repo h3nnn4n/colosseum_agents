@@ -8,6 +8,7 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = "3.10"
 numpy = "^1.21.4"
+colosseum-sdk = "^0.1.1"
 
 [tool.poetry.dev-dependencies]
 
