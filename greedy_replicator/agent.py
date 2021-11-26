@@ -30,7 +30,7 @@ def main():
             else:
                 actor.move(food)
 
-        if main_base.can_spawn and state.actors.mine.count < 2:
+        if main_base and main_base.can_spawn and state.actors.mine.count < 2:
             base.spawn()
 
         agent.send_commands()
