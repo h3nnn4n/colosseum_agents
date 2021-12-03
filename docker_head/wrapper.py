@@ -5,7 +5,7 @@ from pexpect.popen_spawn import PopenSpawn
 
 WRAPEE_PATH = "./agent.py"
 SERVER_ADDRESS = "/var/colosseum.socket"
-SEPARATOR = os.environ.get("SEPARATOR")
+SEPARATOR = os.environ.get("SEPARATOR", "\n")
 
 
 def send(socket, msg):
