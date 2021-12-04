@@ -45,6 +45,8 @@ def main():
     while True:
         for data in reader(sock):
             result = exchange_message(wrapped, data)
+            if not result:
+                break
             send(sock, result)
 
 
