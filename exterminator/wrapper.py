@@ -29,7 +29,7 @@ def send(socket, msg):
         totalsent = totalsent + sent
 
 
-def reader(socket, read_size=4):
+def reader(socket, read_size=512):
     buffer = ""
     while True:
         # FIXME: This could deadlock if the message has two separators
