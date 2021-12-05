@@ -1,11 +1,13 @@
+import json
 import logging
 import os
+import signal
 import socket
 
 from pexpect.popen_spawn import PopenSpawn
 
+logging.basicConfig(filename="network_wrapper.log", level=logging.DEBUG)
 logger = logging.getLogger("network_wrapper")
-logger.setLevel(logging.DEBUG)
 
 WRAPEE_PATH = "./agent.py"
 SOCKET_FILE = os.environ.get("SOCKET_FILE", "colosseum.socket")
@@ -14,7 +16,9 @@ SEPARATOR = os.environ.get("SEPARATOR", "\n")
 
 
 def send(socket, msg):
-    msg += SEPARATOR
+    if SEPARATOR not in msg:
+        msg += SEPARATOR
+
     msg = msg.encode()
     msglen = len(msg)
     totalsent = 0
@@ -37,8 +41,12 @@ def reader(socket, read_size=4):
             yield data
 
 
-def exchange_message(child_process, data_in):
+def exchange_message(child_process, data_in, send_only=True):
     child_process.sendline(data_in)
+
+    if send_only:
+        return
+
     data_out = child_process.readline().decode().strip()
     return data_out
 
@@ -51,14 +59,33 @@ def main():
     sock.connect(SERVER_ADDRESS)
     logger.info("connected")
 
-    while True:
-        for data in reader(sock):
-            logger.debug(f"got {data=}")
-            result = exchange_message(wrapped, data)
-            logger.debug(f"sending {result=}")
-            send(sock, result)
+    logger.debug("loop")
+    for data in reader(sock):
+        logger.debug(f"got data: {data}")
+        # If we have a stop we should only send a message to the agent, but
+        # wait for no response.
+        done = check_stop(data)
+        result = exchange_message(wrapped, data, send_only=done)
 
+        if done:
+            break
+
+        logger.debug(f"sending {result=}")
+        send(sock, result)
+
+    logger.info("killing agent")
+    wrapped.kill(signal.SIGTERM)
     logger.info("done")
+
+
+def check_stop(raw_message):
+    try:
+        payload = json.loads(raw_message)
+        if payload.get("stop"):
+            logging.info("found stop command")
+            return True
+    except Exception as e:
+        return False
 
 
 if __name__ == "__main__":
