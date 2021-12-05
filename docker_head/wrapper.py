@@ -1,15 +1,15 @@
-import os
 import logging
+import os
 import socket
 
 from pexpect.popen_spawn import PopenSpawn
 
-logger = logging.getLogger('network_wrapper')
+logger = logging.getLogger("network_wrapper")
 logger.setLevel(logging.DEBUG)
 
 WRAPEE_PATH = "./agent.py"
 SOCKET_FILE = os.environ.get("SOCKET_FILE", "colosseum.socket")
-SERVER_ADDRESS = f"/var/colosseum/{SOCKET_FILE}"
+SERVER_ADDRESS = os.path.join("/var/colosseum", SOCKET_FILE)
 SEPARATOR = os.environ.get("SEPARATOR", "\n")
 
 
