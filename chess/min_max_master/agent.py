@@ -7,7 +7,7 @@ import logging
 import chess
 from utils import get_internal_id, get_state, send_commands
 
-AGENT_NAME = "mixmax"
+AGENT_NAME = "min_max_master"
 
 
 logging.basicConfig(
