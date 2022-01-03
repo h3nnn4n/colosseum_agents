@@ -37,7 +37,6 @@ def main():
     )
 
     failure_mode = random.choice(list(FailureModes))
-    failure_mode = FailureModes.INVALID_JSON_PAYLOAD
 
     logging.info(f"{failure_mode=}")
 
