@@ -7,4 +7,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["python", "wrapper.py"]
+ENV FLASK_APP agent
+
+# FIXME: Binding to 0 is probably unecessary
+CMD ["flask", "run", "--port=80"]
