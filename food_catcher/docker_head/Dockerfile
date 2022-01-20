@@ -7,4 +7,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["python", "wrapper.py"]
+ENV FLASK_APP wrapper
+
+# FIXME: Binding to 0 is probably unecessary
+CMD ["flask", "run", "--host=0.0.0.0", "--port=80"]
