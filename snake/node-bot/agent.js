@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const AGENT_NAME = "noodles"
 let AGENT_ID = null
 
