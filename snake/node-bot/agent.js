@@ -33,5 +33,7 @@ process.stdin.on("data", raw_data => {
 
   update(state, response)
 
-  process.stdout.write(JSON.stringify(response))
+  process.stdout.write(JSON.stringify(response) + "\n")
 })
+
+setInterval(() => {}, 5); // HACK
