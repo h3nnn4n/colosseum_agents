@@ -1,7 +1,11 @@
 #!/usr/bin/env node
 
+const fs = require("fs")
+
 const AGENT_NAME = "noodles"
 let AGENT_ID = null
+
+const log_file = `${AGENT_NAME}.log`
 
 function choice(array) {
   return array[Math.floor(Math.random() * array.length)];
@@ -11,8 +15,13 @@ function update(state, response) {
   response.move = choice(["UP", "RIGHT", "DOWN", "LEFT"])
 }
 
+try {
+  fs.unlinkSync(log_file)
+} catch(err) { }
+
 process.stdin.on("data", raw_data => {
   raw_data = raw_data.toString()
+  fs.writeFile(log_file, raw_data, { flag: 'a+' }, err => {});
   state = JSON.parse(raw_data)
 
   let response = {}
