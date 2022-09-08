@@ -12,19 +12,7 @@ function choice(array) {
   return array[Math.floor(Math.random() * array.length)];
 }
 
-function update(state, response) {
-  response.move = choice(["UP", "RIGHT", "DOWN", "LEFT"])
-}
-
-try {
-  fs.unlinkSync(log_file)
-} catch(err) { }
-
-process.stdin.on("data", raw_data => {
-  raw_data = raw_data.toString()
-  fs.writeFile(log_file, `got: ${raw_data}`, { flag: 'a+' }, err => {});
-  state = JSON.parse(raw_data)
-
+function update(state) {
   let response = {}
 
   if (state.stop)
@@ -41,10 +29,31 @@ process.stdin.on("data", raw_data => {
   if (state.ping)
     response.pong = "noodles"
 
-  update(state, response)
+  response.move = choice(["UP", "RIGHT", "DOWN", "LEFT"])
+
+  return response
+}
+
+function log_to_file(message) {
+  fs.writeFile(log_file, message, { flag: 'a+' }, err => {});
+}
+
+process.stdin.on("data", raw_data => {
+  raw_data = raw_data.toString()
+  log_to_file(`got: ${raw_data}`)
+  state = JSON.parse(raw_data)
+
+  let response = {}
+
+  try {
+    response = update(state)
+  } catch(err) {
+    response = {}
+    log_to_file(`got error: ${err}\n`)
+  }
 
   let output = JSON.stringify(response) + "\n"
-  fs.writeFile(log_file, `sending: ${output}`, { flag: 'a+' }, err => {});
+  log_to_file(`sending: ${output}`)
   process.stdout.write(output)
 })
 
