@@ -35,7 +35,7 @@ function update(state) {
 }
 
 function log_to_file(message) {
-  fs.writeFile(log_file, message, { flag: 'a+' }, err => {});
+  fs.writeFileSync(log_file, message, { flag: 'a+' }, err => {});
 }
 
 process.stdin.on("data", raw_data => {
