@@ -22,7 +22,7 @@ try {
 
 process.stdin.on("data", raw_data => {
   raw_data = raw_data.toString()
-  fs.writeFile(log_file, raw_data, { flag: 'a+' }, err => {});
+  fs.writeFile(log_file, `got: ${raw_data}`, { flag: 'a+' }, err => {});
   state = JSON.parse(raw_data)
 
   let response = {}
@@ -43,7 +43,9 @@ process.stdin.on("data", raw_data => {
 
   update(state, response)
 
-  process.stdout.write(JSON.stringify(response) + "\n")
+  let output = JSON.stringify(response) + "\n"
+  fs.writeFile(log_file, `sending: ${output}`, { flag: 'a+' }, err => {});
+  process.stdout.write(output)
 })
 
 setInterval(() => {}, 5); // HACK
