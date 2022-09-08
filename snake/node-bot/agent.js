@@ -5,7 +5,8 @@ const fs = require("fs")
 const AGENT_NAME = "noodles"
 let AGENT_ID = null
 
-const log_file = `${AGENT_NAME}.log`
+let random_string = (Math.random() + 1).toString(36).substring(7);
+const log_file = `${AGENT_NAME}__${random_string}.log`
 
 function choice(array) {
   return array[Math.floor(Math.random() * array.length)];
