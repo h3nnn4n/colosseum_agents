@@ -1,7 +1,7 @@
 import json
-from random import choice
+import sys
 from http.server import BaseHTTPRequestHandler, HTTPServer
-
+from random import choice
 
 hostName = "localhost"
 serverPort = 8080
@@ -11,6 +11,7 @@ _DIE = False
 
 AGENT_NAME = "random"
 AGENT_ID = None
+MODE = "STDIO"
 
 
 def bot(state):
@@ -35,14 +36,14 @@ def bot(state):
 
     response["move"] = choice(["UP", "RIGHT", "DOWN", "LEFT"])
 
-    return (response)
+    return response
 
 
 class BotServer(BaseHTTPRequestHandler):
     def do_POST(self):
         self.send_response(200)
 
-        content_len = int(self.headers.get('Content-Length'))
+        content_len = int(self.headers.get("Content-Length"))
         post_body = self.rfile.read(content_len)
         payload = json.loads(post_body)
         response = bot(payload)
@@ -52,9 +53,27 @@ class BotServer(BaseHTTPRequestHandler):
         self.wfile.write((json.dumps(response)).encode())
 
 
-if __name__ == "__main__":
-    webServer = HTTPServer((hostName, serverPort), BotServer)
+def main():
+    while True:
+        data = sys.stdin.readline()
+        state = json.loads(data)
+        response = bot(state)
+        send_commands(response)
 
-    with webServer as s:
-        while not _DIE:
-            s.handle_request()
+
+def send_commands(data):
+    data_encoded = json.dumps(data)
+    sys.stdout.write(data_encoded + "\n")
+    sys.stdout.flush()
+
+
+if __name__ == "__main__":
+    if MODE == "STDIO":
+        main()
+
+    if MODE == "HTTP":
+        webServer = HTTPServer((hostName, serverPort), BotServer)
+
+        with webServer as s:
+            while not _DIE:
+                s.handle_request()
