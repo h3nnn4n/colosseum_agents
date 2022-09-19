@@ -2,10 +2,7 @@
 
 import json
 import sys
-
-from utils import send_commands
 from random import choice
-
 
 AGENT_NAME = "random"
 
@@ -33,6 +30,12 @@ def main():
         response["move"] = choice(["UP", "RIGHT", "DOWN", "LEFT"])
 
         send_commands(response)
+
+
+def send_commands(data):
+    data_encoded = json.dumps(data)
+    sys.stdout.write(data_encoded + "\n")
+    sys.stdout.flush()
 
 
 if __name__ == "__main__":

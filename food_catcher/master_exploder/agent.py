@@ -7,6 +7,7 @@ import string
 import sys
 from datetime import datetime
 from enum import Enum, auto, unique
+from time import sleep
 
 AGENT_NAME = "master_exploder"
 AGENT_ID = None
@@ -22,6 +23,7 @@ class FailureModes(Enum):
     INCORRECT_AGENT_ID = auto()
     NONE_AGENT_ID = auto()
     INVALID_JSON_PAYLOAD = auto()
+    TIMEOUT = auto()
 
     # TODO:
     # try acting on someone elses entities
@@ -84,6 +86,8 @@ def main():
             if failure_mode == FailureModes.CRASH_MIDWAY:
                 logging.info("crashing midway")
                 raise RuntimeError("Boom!")
+            if failure_mode == FailureModes.TIMEOUT:
+                sleep(5)
 
         if AGENT_ID:
             response["agent_id"] = AGENT_ID
@@ -131,3 +135,4 @@ if __name__ == "__main__":
         main()
     except Exception as e:
         logging.exception(e)
+        raise
