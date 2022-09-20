@@ -1,0 +1,2 @@
+This agent is intended to fail and shouldn't be used as a reference on how to
+implement a proper one. It's sole purpose is to test error handling.
