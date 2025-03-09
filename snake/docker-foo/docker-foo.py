@@ -46,7 +46,6 @@ class RandomAgent:
         if message.get("set_agent_id"):
             self.agent_id = message.get("set_agent_id")
             response["agent_name"] = AGENT_NAME
-            print(f"Agent ID set to {self.agent_id}", file=sys.stderr)
 
         # Always include agent ID in responses once we have it
         if self.agent_id:
